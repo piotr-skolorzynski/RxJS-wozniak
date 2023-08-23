@@ -1,22 +1,8 @@
-import { Observable } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 
-const observable$ = new Observable((subscriber) => {
-  console.log('Observable executed');
-  subscriber.next('Alice');
-  subscriber.next('Ben');
-  setTimeout(() => {
-    subscriber.next('Charlie');
-  }, 2000);
+//tworzy Observable, która tworzy http request
+const ajax$ = ajax<any>('https://random-data-api.com/api/name/random_name');
 
-  setTimeout(() => subscriber.error(new Error('Failure')), 4000);
-
-  return () => console.log('Teardown');
-});
-
-console.log('Before subscribe');
-observable$.subscribe({
-  next: (value) => console.log(value),
-  complete: () => console.log('Observable emission ended'),
-  error: (err) => console.log(err.message),
-});
-console.log('After subscribe');
+ajax$.subscribe((data) => console.log('Sub1: ', data.response.first_name));
+ajax$.subscribe((data) => console.log('Sub2: ', data.response.first_name));
+ajax$.subscribe((data) => console.log('Sub3: ', data.response.first_name));
