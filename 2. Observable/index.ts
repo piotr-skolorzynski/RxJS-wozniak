@@ -1,8 +1,21 @@
-import { ajax } from 'rxjs/ajax';
+import { Observable } from 'rxjs';
 
-//tworzy Observable, która tworzy http request
-const ajax$ = ajax<any>('https://random-data-api.com/api/name/random_name');
+const helloButton = document.querySelector('button#hello');
 
-ajax$.subscribe((data) => console.log('Sub1: ', data.response.first_name));
-ajax$.subscribe((data) => console.log('Sub2: ', data.response.first_name));
-ajax$.subscribe((data) => console.log('Sub3: ', data.response.first_name));
+const helloButton$ = new Observable<MouseEvent>((subscriber) => {
+  helloButton.addEventListener('click', (event: MouseEvent) => {
+    subscriber.next(event);
+  });
+});
+
+helloButton$.subscribe((event) =>
+  console.log('Sub1: ', event.type, event.x, event.y)
+);
+
+helloButton$.subscribe((event) =>
+  console.log('Sub2: ', event.type, event.x, event.y)
+);
+
+helloButton$.subscribe((event) =>
+  console.log('Sub3: ', event.type, event.x, event.y)
+);
