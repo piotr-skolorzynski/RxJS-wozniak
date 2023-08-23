@@ -6,8 +6,9 @@ const observable$ = new Observable((subscriber) => {
   subscriber.next('Ben');
   setTimeout(() => {
     subscriber.next('Charlie');
-    subscriber.complete();
   }, 2000);
+
+  setTimeout(() => subscriber.error(new Error('Failure')), 4000);
 
   return () => console.log('Teardown');
 });
@@ -16,5 +17,6 @@ console.log('Before subscribe');
 observable$.subscribe({
   next: (value) => console.log(value),
   complete: () => console.log('Observable emission ended'),
+  error: (err) => console.log(err.message),
 });
 console.log('After subscribe');
