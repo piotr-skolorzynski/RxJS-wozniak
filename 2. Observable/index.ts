@@ -8,6 +8,8 @@ const observable$ = new Observable((subscriber) => {
     subscriber.next('Charlie');
     subscriber.complete();
   }, 2000);
+
+  return () => console.log('Teardown');
 });
 
 console.log('Before subscribe');
