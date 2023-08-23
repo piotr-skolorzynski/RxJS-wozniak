@@ -1,24 +1,14 @@
-import { Observable, of } from 'rxjs';
+import { from } from 'rxjs';
 
-of('Alice', 'Ben', 'Charlie').subscribe({
-  next: (name) => console.log(name),
-  complete: () => console.log('Completed'),
+const somePromise = new Promise((resolve, reject) => {
+  // resolve('Resolved!');
+  reject('Rejected!');
 });
 
-//własna implementacja funkcji of dla pokazania ile się zaoszczędza
-//oczywiście posiada ona więcej featureów ale podstawowe działanie jest
-//właśnie takie
-function ourOwnOf(...args: string[]): Observable<string> {
-  return new Observable<string>((subscriber) => {
-    for (let i = 0; i < args.length; i++) {
-      subscriber.next(args[i]);
-    }
+const observableFromPromise$ = from(somePromise);
 
-    subscriber.complete();
-  });
-}
-
-ourOwnOf('Alice', 'Ben', 'Charlie').subscribe({
-  next: (name) => console.log(name),
+observableFromPromise$.subscribe({
+  next: (value) => console.log(value),
+  error: (err) => console.log('Error: ', err),
   complete: () => console.log('Completed'),
 });
