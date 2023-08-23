@@ -1,21 +1,24 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
-const helloButton = document.querySelector('button#hello');
-
-const helloButton$ = new Observable<MouseEvent>((subscriber) => {
-  helloButton.addEventListener('click', (event: MouseEvent) => {
-    subscriber.next(event);
-  });
+of('Alice', 'Ben', 'Charlie').subscribe({
+  next: (name) => console.log(name),
+  complete: () => console.log('Completed'),
 });
 
-helloButton$.subscribe((event) =>
-  console.log('Sub1: ', event.type, event.x, event.y)
-);
+//własna implementacja funkcji of dla pokazania ile się zaoszczędza
+//oczywiście posiada ona więcej featureów ale podstawowe działanie jest
+//właśnie takie
+function ourOwnOf(...args: string[]): Observable<string> {
+  return new Observable<string>((subscriber) => {
+    for (let i = 0; i < args.length; i++) {
+      subscriber.next(args[i]);
+    }
 
-helloButton$.subscribe((event) =>
-  console.log('Sub2: ', event.type, event.x, event.y)
-);
+    subscriber.complete();
+  });
+}
 
-helloButton$.subscribe((event) =>
-  console.log('Sub3: ', event.type, event.x, event.y)
-);
+ourOwnOf('Alice', 'Ben', 'Charlie').subscribe({
+  next: (name) => console.log(name),
+  complete: () => console.log('Completed'),
+});
