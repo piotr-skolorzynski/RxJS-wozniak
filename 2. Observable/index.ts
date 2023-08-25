@@ -10,11 +10,13 @@ fromEvent(fetchButton, 'click')
   .pipe(
     map(() => endpointInput.value),
     concatMap((value) =>
-      ajax(`https://random-data-api.com/api/${value}/random_${value}`)
-    ),
-    catchError(() => EMPTY)
+      ajax(`https://random-data-api.com/api/${value}/random_${value}`).pipe(
+        catchError(() => EMPTY)
+      )
+    )
   )
   .subscribe({
     next: (value) => console.log(value),
+    error: (err) => console.log('Error: ', err),
     complete: () => console.log('Completed!'),
   });
